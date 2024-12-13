@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post</title>
+    <script>
+        // Function to handle the form submission
+        async function createPost(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Get form data
+            const formData = new FormData(event.target);
+            const data = {
+                title: formData.get('title'),
+                content: formData.get('content'),
+                user_id: formData.get('user_id')
+            };
+
+            console.log(data);
+
+            // Send a POST request to create the new post
+            try {
+                const response = await fetch('/create_post/', {
+                    method: 'POST',  // Ensure the method is POST
+                    headers: {
+                        'Content-Type': 'application/json' // Set content type as JSON
+                    },
+                    body: JSON.stringify(data) // Send form data as JSON
+                });
+
+                // Handle response
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Post created successfully!');
+                    // Optionally, clear the form after successful submission
+                    event.target.reset();
+                } else {
+                    alert('Error: ' + result.detail);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Create a New Post</h1>
+    <form id="createPostForm" onsubmit="createPost(event)">
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title" required>
+        
+        <label for="content">Content</label>
+        <textarea name="content" id="content" required></textarea>
+
+        <label for="user_id">User ID</label>
+        <input type="number" name="user_id" id="user_id" required>
+
+        <button type="submit">Create Post</button>
+    </form>
+</body>
+</html>

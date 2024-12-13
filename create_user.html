@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create User</title>
+</head>
+<body>
+    <h1>Create User</h1>
+    <form id="createUserForm" onsubmit="createUser(event)">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" required>
+        
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" required>
+        
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
+        
+        <button type="submit">Create</button>
+    </form>
+</body>
+
+<script>
+    // Function to handle the form submission
+    async function createUser(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Get form data
+        const formData = new FormData(event.target);
+        const data = {
+            username: formData.get('username'),
+            email: formData.get('email'),
+            password: formData.get('password')
+        };
+
+        console.log(data)
+
+        // Send a POST request with the form data as JSON
+        try {
+            const response = await fetch('/api/users/create/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' // Correct header for JSON
+                },
+                body: JSON.stringify(data) // JSON-encoded body
+            });
+
+            // Handle response
+            const result = await response.json();
+            if (response.ok) {
+                alert('User created successfully!');
+            } else {
+                alert('Error: ' + result.detail);
+            }
+        } catch (error) {
+            alert('Error: ' + error.message);
+        }
+    }
+</script>
+
+</html>
