@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+    <h1>Users</h1>
+    <ul>
+        {% for user in users %}
+            <li>ID: {{ user.id }} Username: {{ user.username }} - <a href="/edit_user/{{ user.id }}">Edit</a> | <a href="/delete_user/{{ user.id }}">Delete</a></li>
+        {% endfor %}
+    </ul>
+    <a href="/create_user/">Create New User</a>
+
+    <h1>Posts</h1>
+    <ul>
+        {% for post in posts %}
+            <li>
+                <strong>{{ post.title }}</strong><br>
+                <p>{{ post.content }}</p>
+                <p><em>Posted by User ID: {{ post.user_id }}</em></p>
+                <a href="/edit_post/{{ post.id }}">Edit</a> | <a href="/delete_post/{{ post.id }}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="/create_post/">Create New Post</a>
+</body>
+</html>

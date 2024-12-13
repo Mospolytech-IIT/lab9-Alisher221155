@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Post</title>
+    <script>
+        // Function to handle the form submission
+        async function updatePost(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Get the post ID from the form 
+            const postId = document.getElementById("id").value
+            
+            // Get form data
+            const formData = new FormData(event.target);
+            const data = {
+                title: formData.get('title'),
+                content: formData.get('content'),
+                user_id: formData.get('user_id')
+            };
+
+            console.log(data);
+
+            // Send a PUT request to update the post
+            try {
+                const response = await fetch(`/edit_post/${postId}/`, {
+                    method: 'POST',  // Use 'POST' if you are using POST method to edit
+                    headers: {
+                        'Content-Type': 'application/json' // Ensure content type is set to JSON
+                    },
+                    body: JSON.stringify(data) // Send data as JSON
+                });
+
+                // Handle response
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Post updated successfully!');
+                } else {
+                    alert('Error: ' + result.detail);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Edit Post</h1>
+    <form id="editPostForm" onsubmit="updatePost(event)">
+        <input type="number" name="id" id="id" disabled value="{{ post.id }}">
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title" value="{{ post.title }}" required>
+        
+        <label for="content">Content</label>
+        <textarea name="content" id="content" required>{{ post.content }}</textarea>
+        
+        <label for="content">User ID</label>
+        <input type="number" name="user_id" id="user_id" value="{{ post.user_id }}" required>
+        <button type="submit">Update Post</button>
+    </form>
+</body>
+</html>
